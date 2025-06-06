@@ -85,7 +85,8 @@ router.addHandler('details', async ({ request, page, log }) => {
         }
 
         return Array.from(el.querySelectorAll(`${siblingStartSel} ~ p`))
-            .filter((par) => {
+            .filter((par: Element) => {
+                // https://stackoverflow.com/a/57379954
                 if (par.contains(afterDescriptionButton) || afterDescriptionButton.contains(par)) {
                     return undefined; // not before or after, it's a parent child relationship.
                 }
@@ -120,7 +121,7 @@ router.addHandler('details', async ({ request, page, log }) => {
 
     const id = thisUrl.pathname.split('/').slice(2, -1).join('-');
     const imgUrl = await main.evaluate((el) => {
-        return el.querySelector('figure > img').getAttribute('src');
+        return el.querySelector('figure > img')?.getAttribute('src');
     });
     const pageData = {
         id,
