@@ -1,6 +1,6 @@
 ## PlaywrightCrawler template
 
- An [Apify Actor](https://apify.com/actors) using `PlaywrightCrawler` with Crawlee to scrape the events from [The Registry Theatre]() website.
+ An [Apify Actor](https://apify.com/actors) using `PlaywrightCrawler` with Crawlee to scrape the events from [The Registry Theatre](https://registrytheatre.com/) website.
 
 The event dataset items are in the following shape:
 ```
