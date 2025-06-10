@@ -6,6 +6,8 @@ import { startCase } from 'lodash-es';
 export const router = createPlaywrightRouter();
 const dateTimeSel = 'h2.tribe-events-schedule__datetime';
 
+const detailsHandlerLabel = 'details';
+export const items: object[]  = [];
 router.addDefaultHandler(async ({ enqueueLinks, request, page, log }) => {
     const title = await page.title();
     log.info(`LIST: ${request.loadedUrl} is '${title}'`);
@@ -33,11 +35,11 @@ router.addDefaultHandler(async ({ enqueueLinks, request, page, log }) => {
     }
     await enqueueLinks({
         urls: detailsUrls,
-        label: 'details',
+        label: detailsHandlerLabel,
     });
 });
 
-router.addHandler('details', async ({ request, page, log }) => {
+router.addHandler(detailsHandlerLabel, async ({ request, page, log }) => {
     const title = await page.title();
     log.info(`DETAILS: ${request.loadedUrl} is '${title}'`);
     const main = page.getByRole('main');
@@ -120,7 +122,7 @@ router.addHandler('details', async ({ request, page, log }) => {
     const thisUrl = new URL(request.url);
 
     const id = thisUrl.pathname.split('/').slice(2, -1).join('-');
-    const imgUrl = await main.evaluate((el) => {
+    const imageUri = await main.evaluate((el) => {
         return el.querySelector('figure > img')?.getAttribute('src');
     });
     const pageData = {
@@ -128,8 +130,10 @@ router.addHandler('details', async ({ request, page, log }) => {
         name: startCase(name),
         start: dateTimeISO,
         description,
+        locationName: 'The Registry Theatre',
         url: request.url,
-        imgUrl,
+        imageUri,
     };
+    items.push(pageData);
     await Dataset.pushData(pageData);
 });
